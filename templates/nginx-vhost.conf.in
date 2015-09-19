@@ -49,3 +49,28 @@ server {
     }
 
 }
+
+
+# Virtual host para el subdominio supervisor.${hosts:servername}
+server {
+    listen ${ports:nginx};
+    server_name supervisor.${hosts:servername};
+
+    location / {
+            proxy_pass http://${site-settings:localhost}:${ports:supervisor}/;
+            proxy_set_header Host $host;
+            proxy_buffering off;
+    }
+}
+
+# Virtual host para el subdominio administrador.${hosts:servername}
+server {
+    listen ${ports:nginx};
+    server_name administrador.${hosts:servername};
+
+    location / {
+            proxy_pass http://${hosts:client-debug}:${ports:client-debug}/;
+            proxy_set_header Host $host;
+            proxy_buffering off;
+    }
+}
