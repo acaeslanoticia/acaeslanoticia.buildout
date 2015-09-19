@@ -5,7 +5,7 @@ upstream zmi {
 
 server {
     listen ${ports:nginx} default;
-    server_name ${hosts:servername};
+    server_name ${hosts:servername} www.${hosts:servername};
 
     # logs
     access_log  /var/log/nginx/${hosts:servername}.access.log;
