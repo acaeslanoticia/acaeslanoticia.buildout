@@ -1,8 +1,3 @@
-# backend, ZMI instance debug.
-upstream zmi {
-    server ${hosts:client-debug}:${ports:client-debug};
-}
-
 server {
     listen ${ports:nginx} default;
     server_name ${hosts:servername} www.${hosts:servername};
@@ -37,25 +32,19 @@ server {
     #        deny all;
     #}
 
-    # default root directory on debian based system.
-    root /var/www/nginx-default;
+    # Cliente Zope predeterminado.
     location / {
-            rewrite ^/(.*)$ /VirtualHostBase/http/${site-settings:domain-name-production}:80/${site-settings:site-id}/VirtualHostRoot/$1 break;
-            proxy_read_timeout 3601;
-            proxy_connect_timeout 3601;
+            proxy_pass       http://${hosts:client1}:${ports:client1}/VirtualHostBase/http/\
+            ${site-settings:domain-name-production}:${ports:nginx}/${site-settings:site-id}/VirtualHostRoot/;
             proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     }
 
-    # ZMI from client-debug location.
-    location ~ ^/zmi-admin/(.)$ {
-            rewrite ^/zmi-admin/(.)$ /$1 break;
-            proxy_read_timeout 3601;
-            proxy_connect_timeout 3601;
-            proxy_pass http://zmi;
+
+    # Interfaz Administrativa de Zope
+    location /manage {
+            proxy_pass       http://${hosts:client1}:${ports:client1}/VirtualHostBase/http/\
+            ${site-settings:domain-name-production}:${ports:nginx}/manage_main/VirtualHostRoot/;
             proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     }
+
 }
