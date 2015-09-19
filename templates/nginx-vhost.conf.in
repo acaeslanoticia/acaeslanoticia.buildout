@@ -1,3 +1,9 @@
+# Este especifica en cual IP y puerto Zope/Plone esta ejecutandose.
+# Por defecto es 127.0.0.1:8080
+upstream zopes {
+    server ${hosts:client1}:${ports:client1};
+}
+
 # Virtual host para los dominios ${hosts:servername} y www.${hosts:servername};
 server {
     listen ${ports:nginx} default;
@@ -35,16 +41,14 @@ server {
 
     # Cliente Zope predeterminado.
     location / {
-            proxy_pass       http://${hosts:client1}:${ports:client1}/VirtualHostBase/http/\
-            ${site-settings:domain-name-production}:${ports:nginx}/${site-settings:site-id}/VirtualHostRoot/;
+            proxy_pass       http://zopes/VirtualHostBase/http/${site-settings:domain-name-production}:${ports:nginx}/${site-settings:site-id}/VirtualHostRoot/;
             proxy_set_header Host $host;
     }
 
 
     # Interfaz Administrativa de Zope
     location /manage {
-            proxy_pass       http://${hosts:client1}:${ports:client1}/VirtualHostBase/http/\
-            ${site-settings:domain-name-production}:${ports:nginx}/manage_main/VirtualHostRoot/;
+            proxy_pass       http://zopes/VirtualHostBase/http/${site-settings:domain-name-production}:${ports:nginx}/manage_main/VirtualHostRoot/;
             proxy_set_header Host $host;
     }
 
