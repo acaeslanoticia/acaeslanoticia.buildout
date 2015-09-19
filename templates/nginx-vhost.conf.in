@@ -1,3 +1,4 @@
+# Virtual host para los dominios ${hosts:servername} y www.${hosts:servername};
 server {
     listen ${ports:nginx} default;
     server_name ${hosts:servername} www.${hosts:servername};
