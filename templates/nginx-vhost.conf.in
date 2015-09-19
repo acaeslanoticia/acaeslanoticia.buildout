@@ -61,9 +61,9 @@ server {
     server_name supervisor.${hosts:servername};
 
     location / {
-            proxy_pass http://${site-settings:localhost}:${ports:supervisor}/;
+            proxy_pass       http://${site-settings:localhost}:${ports:supervisor}/;
             proxy_set_header Host $host;
-            proxy_buffering off;
+            proxy_buffering  off;
     }
 }
 
@@ -73,8 +73,8 @@ server {
     server_name administrador.${hosts:servername};
 
     location / {
-            proxy_pass http://${hosts:client-debug}:${ports:client-debug}/;
+            proxy_pass       http://${hosts:client-debug}:${ports:client-debug}/VirtualHostBase/http/${site-settings:domain-name-production}:${ports:nginx}/manage_main/VirtualHostRoot/;
             proxy_set_header Host $host;
-            proxy_buffering off;
+            proxy_buffering  off;
     }
 }
