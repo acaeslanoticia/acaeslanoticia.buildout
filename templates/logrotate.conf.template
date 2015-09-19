@@ -7,6 +7,13 @@ create
 compress
 delaycompress
 
+# Supervisor service log file
+${buildout:var-dir}/log/supervisord.log {
+    postrotate
+        /bin/kill -USR2 $(cat ${supervisor:pidfile})
+    endscript
+}
+
 # Zeo server log file
 ${buildout:var-dir}/log/zeoserver.log {
     postrotate
